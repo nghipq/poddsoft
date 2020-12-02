@@ -1,0 +1,36 @@
+{
+  "expo": {
+    "name": "Podd",
+    "slug": "poddapp",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/app.png",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "bundleIdentifier": "com.podd.chickenapp",
+      "buildNumber": "1.0.0"
+    },
+    "android": {
+      "package": "com.podd.chickenapp",
+      "versionCode": 1
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "sdkVersion": "39.0.0",
+    "platforms": [
+      "android",
+      "ios"
+    ]
+  }
+}
