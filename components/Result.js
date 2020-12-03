@@ -1,6 +1,7 @@
 import React from 'react'
 import { View, Text, StyleSheet, Image, TouchableOpacity,ScrollView, Button, Linking} from 'react-native'
 import * as Facebook from 'expo-facebook';
+import Diagnotics from "../screens/diagnotics/Diagnotics.js";
 
 async function logIn() {
     try {
@@ -28,8 +29,9 @@ async function logIn() {
   }
 
 export default function Result(props) {
+  
     const { info } = props
-
+  
     return (
         <ScrollView>
             <Text style={styles.title}>Tên bệnh:</Text>
@@ -41,7 +43,11 @@ export default function Result(props) {
             <Text style={styles.title}>Liên hệ với chuyên gia</Text>
             <Button
                 title="Liên hệ tư vấn"
-                onPress={() => logIn()}
+           
+             onPress={() => {
+           // Diagnotics.onClose();
+            info.navigation.navigate('ChatBot')
+            }}
             />
         </ScrollView>
     )

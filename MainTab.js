@@ -138,6 +138,7 @@ const DiagnoticsStackScreen = ({ navigation }) => (
       options={{ title: "Chẩn đoán" }}
     />
     <DiagnoticsStack.Screen name="CameraEx" component={CameraEx} />
+    <DiagnoticsStack.Screen name="ChatBot" component={ChatBot}/>
   </DiagnoticsStack.Navigator>
 );
 
