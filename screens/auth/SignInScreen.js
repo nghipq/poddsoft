@@ -38,6 +38,8 @@ const SignInScreen = (props) => {
           if (res.data.success) {
             Alert.alert("Thành công", `Chào ${res.data.username}`);
             await AsyncStorage.setItem("id", JSON.stringify(res.data.id));
+            await AsyncStorage.setItem("name", res.data.username);
+            console.log(res.data.username)
 
             if (res.data.permission == 0) setLogin(true);
             else if (res.data.permission == 1) props.navigation.navigate("Store");

@@ -1,16 +1,17 @@
 import React from "react";
-import {StyleSheet, View, Text, TextInput, TouchableOpacity } from "react-native";
+import { StyleSheet, View, Text, TextInput, TouchableOpacity, Platform, KeyboardAvoidingView, SafeAreaView } from "react-native";
 import ChatBarImage from "../chats/ChatBarImage";
+
 import IoIcon from "react-native-vector-icons/Ionicons";
+import Fire from './Fire';
+import { GiftedChat } from 'react-native-gifted-chat'
+import AsyncStorage from "@react-native-community/async-storage"
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
 
 export default class ChatBot extends React.Component {
-  constructor(props) {
-    super(props);
-  }
 
   static navigationOptions = ({ navigation }) => {
     return {
@@ -19,160 +20,63 @@ export default class ChatBot extends React.Component {
     };
   };
 
-  render() {
-    return (
-      <View style={styles.container}>
-      <Text>Đang phát triển</Text>
-    </View>
-      // <View
-      //   style={{
-      //     display: "flex",
-      //     height: hp("85%"),
-      //   }}
-      // >
-      //   <View
-      //     style={{
-      //       marginBottom: "auto",
-      //     }}
-      //   >
-      //     <View
-      //       style={{
-      //         width: 250,
-      //         borderRadius: 40 / 2,
-      //         margin: 5,
-      //         marginLeft: "auto",
-      //         padding: 5,
-      //         backgroundColor: "#c1c1c1",
-      //       }}
-      //     >
-      //       <Text
-      //         style={{
-      //           padding: 5,
-      //         }}
-      //       >
-      //         Xin chào! Bạn có thể giúp tôi được không?
-      //       </Text>
-      //     </View>
-      //     <View
-      //       style={{
-      //         width: 250,
-      //         borderRadius: 40 / 2,
-      //         margin: 5,
-      //         marginRight: "auto",
-      //         padding: 5,
-      //         backgroundColor: "blue",
-      //       }}
-      //     >
-      //       <Text
-      //         style={{
-      //           color: "white",
-      //           padding: 5,
-      //         }}
-      //       >
-      //         Xin chào! Bạn cần chúng tôi giúp gì?
-      //       </Text>
-      //     </View>
-      //   </View>
-      //   <View
-      //     style={{
-      //       justifyContent: "flex-end",
-      //       display: "flex",
-      //       flexDirection: "row",
-      //       alignItems: "center",
-      //       borderTopWidth: 2,
-      //       borderTopColor: "gray",
-      //       padding: 0,
-      //     }}
-      //   >
-      //     <TouchableOpacity>
-      //       <IoIcon
-      //         name="ios-menu"
-      //         size={28}
-      //         style={{
-      //           padding: 5,
-      //           width: 40,
-      //           height: 40,
-      //           borderRadius: 40 / 2,
-      //           marginLeft: 2,
-      //         }}
-      //       />
-      //     </TouchableOpacity>
-      //     <TouchableOpacity>
-      //       <IoIcon
-      //         name="ios-image"
-      //         size={28}
-      //         style={{
-      //           padding: 5,
-      //           width: 40,
-      //           height: 40,
-      //           borderRadius: 40 / 2,
-      //           marginLeft: 2,
-      //         }}
-      //       />
-      //     </TouchableOpacity>
-      //     <TouchableOpacity>
-      //       <IoIcon
-      //         name="ios-camera"
-      //         size={28}
-      //         style={{
-      //           padding: 5,
-      //           width: 40,
-      //           height: 40,
-      //           borderRadius: 40 / 2,
-      //           marginLeft: 2,
-      //         }}
-      //       />
-      //     </TouchableOpacity>
-      //     <TouchableOpacity>
-      //       <IoIcon
-      //         name="ios-mic"
-      //         size={28}
-      //         style={{
-      //           padding: 5,
-      //           width: 40,
-      //           height: 40,
-      //           borderRadius: 40 / 2,
-      //           marginLeft: 2,
-      //         }}
-      //       />
-      //     </TouchableOpacity>
-      //     <TextInput
-      //       style={{
-      //         flex: 1,
-      //         height: 30,
-      //         margin: 2,
-      //         borderStyle: "solid",
-      //         padding: 5,
-      //         backgroundColor: "#F1F1F1",
-      //         borderRadius: 50,
-      //       }}
-      //       maxLength={40}
-      //     ></TextInput>
-      //     <TouchableOpacity>
-      //       <IoIcon
-      //         name="md-send"
-      //         size={28}
-      //         style={{
-      //           padding: 5,
-      //           width: 40,
-      //           height: 40,
-      //           borderRadius: 40 / 2,
-      //           marginLeft: 2,
-      //         }}
-      //       />
-      //     </TouchableOpacity>
-      //   </View>
-      // </View>
-    );
+
+  state = {
+    messages: [],
+    userId: "",
+    name: ""
   }
+
+  get user() {
+
+    return {
+
+      _id: this.state.userId,
+      name: this.state.name
+    }
+  }
+  componentDidMount() {
+    AsyncStorage.getItem("id").then((res) => {
+      this.setState({
+        userId: res
+      })
+    });
+    AsyncStorage.getItem("name").then((res) => {
+      this.setState({
+        name: res
+      })
+    });
+
+    Fire.get(message => {
+        if(message.room_id) {
+          if (message.room_id._id == this.state.userId) {
+            console.log(message)
+            this.setState(previous => ({
+              messages: GiftedChat.append(previous.messages, message)
+            }))
+          }
+        }
+    });
+  }
+  componentWillUnmount() {
+    Fire.off();
+  }
+
+
+  render() {
+    const chat = <GiftedChat messages={this.state.messages} onSend={Fire.send} user={this.user}></GiftedChat>
+
+    if (Platform.OS === "android") {
+      return (
+        <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding" keyboardVerticalOffset={38} enabled>
+          {chat}
+        </KeyboardAvoidingView>
+      )
+    }
+
+    return <SafeAreaView style={{ flex: 1 }}>{chat}</SafeAreaView>
+  }
+
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    paddingLeft: 16,
-    paddingRight: 16,
-  },
-});
+
