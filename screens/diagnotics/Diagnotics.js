@@ -26,8 +26,9 @@ export default class Diagnotics extends React.Component {
       uri: null,
     };
   }
-  onClose = () => this.setState({ modalVisible: false });
-
+  onClose = () =>{
+    this.setState({ modalVisible: false });
+  }
   static navigationOptions = ({ route, navigation }) => {
     return {
       title: navigation.route.params.title,
@@ -211,7 +212,9 @@ export default class Diagnotics extends React.Component {
                     sickeness: this.state.sickness,
                     solution: this.state.solution,
                     phoneNumber: this.state.phoneNumber,
+                    navigation: this.props.navigation                   
                   }}
+                 
                 />
               ) : this.state.msg ? (
                 <Text style={styles.text}>{this.state.msg}</Text>

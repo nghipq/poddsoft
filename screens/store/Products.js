@@ -29,37 +29,42 @@ export default class Products extends React.Component {
   render() {
     const { navigation } = this.props;
     const { categories } = this.state;
+    return (
+      <View style={styles.container}>
+        <Text>Đang phát triển</Text>
+      </View>
+    );
     // console.log(categories)
-    if (categories.length == 0) {
-      return (
-        <View>
-          <Text style={styles.text}>Không có sản phẩm</Text>
-        </View>
-      );
-    } else {
-      return (
-        <CartContext.Consumer>
-          {({ chooseToProduct }) => (
-            <FlatList
-              data={categories}
-              numColumns={2}
-              renderItem={({ item }) => {
-                return (
-                  <ProductItems
-                    category={item}
-                    onPress={() => {
-                      navigation.navigate("Product");
-                      chooseToProduct(item);
-                    }}
-                  />
-                );
-              }}
-              keyExtractor={(item) => `${item.id}`}
-            />
-          )}
-        </CartContext.Consumer>
-      );
-    }
+    // if (categories.length == 0) {
+    //   return (
+    //     <View>
+    //       <Text style={styles.text}>Không có sản phẩm</Text>
+    //     </View>
+    //   );
+    // } else {
+    //   return (
+    //     <CartContext.Consumer>
+    //       {({ chooseToProduct }) => (
+    //         <FlatList
+    //           data={categories}
+    //           numColumns={2}
+    //           renderItem={({ item }) => {
+    //             return (
+    //               <ProductItems
+    //                 category={item}
+    //                 onPress={() => {
+    //                   navigation.navigate("Product");
+    //                   chooseToProduct(item);
+    //                 }}
+    //               />
+    //             );
+    //           }}
+    //           keyExtractor={(item) => `${item.id}`}
+    //         />
+    //       )}
+    //     </CartContext.Consumer>
+    //   );
+    // }
   }
 }
 const styles = StyleSheet.create({
@@ -69,4 +74,11 @@ const styles = StyleSheet.create({
     textAlign: "center",
     top: 100,
   },
+  container: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingLeft: 16,
+    paddingRight: 16,
+  }
 });
