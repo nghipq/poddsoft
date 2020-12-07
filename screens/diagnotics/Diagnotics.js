@@ -26,6 +26,7 @@ export default class Diagnotics extends React.Component {
       uri: null,
     };
   }
+
   onClose = () =>{
     this.setState({ modalVisible: false });
   }
@@ -57,8 +58,6 @@ export default class Diagnotics extends React.Component {
       name: this.props.route.params.Name,
     };
 
-    console.log(item);
-
     var body = new FormData();
     body.append("userId", this.state.userId);
     body.append("photo", item);
@@ -87,6 +86,14 @@ export default class Diagnotics extends React.Component {
           });
         }
       })
+  }
+
+  showChatBot = async () => {
+    this.setState({
+      modalVisible: false
+    });
+
+    this.props.navigation.navigate("ChatBot")
   }
 
   takeImage = async () => {
@@ -144,6 +151,8 @@ export default class Diagnotics extends React.Component {
         }
       });
   };
+
+
 
   render() {
     return (
@@ -215,6 +224,7 @@ export default class Diagnotics extends React.Component {
                     navigation: this.props.navigation                   
                   }}
                  
+                  showChatBot = {this.showChatBot.bind(this)}
                 />
               ) : this.state.msg ? (
                 <Text style={styles.text}>{this.state.msg}</Text>
