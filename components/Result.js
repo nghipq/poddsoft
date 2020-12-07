@@ -30,7 +30,7 @@ async function logIn() {
 
 export default function Result(props) {
   
-    const { info } = props
+    const { info, showChatBot } = props
   
     return (
         <ScrollView>
@@ -44,10 +44,7 @@ export default function Result(props) {
             <Button
                 title="Liên hệ tư vấn"
            
-             onPress={() => {
-           // Diagnotics.onClose();
-            info.navigation.navigate('ChatBot')
-            }}
+             onPress={showChatBot}
             />
         </ScrollView>
     )
