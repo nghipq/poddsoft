@@ -1,6 +1,8 @@
 import React from "react";
-import { StyleSheet, View, Text, TextInput, TouchableOpacity, Platform, KeyboardAvoidingView, SafeAreaView } from "react-native";
+import { StyleSheet, View, Text, TextInput, TouchableOpacity, Platform, KeyboardAvoidingView, SafeAreaView, InputField, Icon, Button } from "react-native";
 import ChatBarImage from "../chats/ChatBarImage";
+import { MaterialCommunityIcons } from 'react-native-vector-icons'
+import * as ImagePicker from "expo-image-picker";
 
 import IoIcon from "react-native-vector-icons/Ionicons";
 import Fire from './Fire';
@@ -12,7 +14,13 @@ import {
 } from "react-native-responsive-screen";
 
 export default class ChatBot extends React.Component {
+  constructor(props) {
+    super(props);
+    var navigation = this.props.navigation
+    this.state = {
 
+    }
+  }
   static navigationOptions = ({ navigation }) => {
     return {
       title: "Liên Hệ",
@@ -48,14 +56,14 @@ export default class ChatBot extends React.Component {
     });
 
     Fire.get(message => {
-        if(message.room_id) {
-          if (message.room_id._id == this.state.userId) {
-            console.log(message)
-            this.setState(previous => ({
-              messages: GiftedChat.append(previous.messages, message)
-            }))
-          }
+      if (message.room_id) {
+        if (message.room_id._id == this.state.userId) {
+          console.log(message)
+          this.setState(previous => ({
+            messages: GiftedChat.append(previous.messages, message)
+          }))
         }
+      }
     });
   }
   componentWillUnmount() {
@@ -63,20 +71,65 @@ export default class ChatBot extends React.Component {
   }
 
 
-  render() {
-    const chat = <GiftedChat messages={this.state.messages} onSend={Fire.send} user={this.user}></GiftedChat>
 
-    if (Platform.OS === "android") {
-      return (
-        <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding" keyboardVerticalOffset={38} enabled>
-          {chat}
-        </KeyboardAvoidingView>
-      )
-    }
 
-    return <SafeAreaView style={{ flex: 1 }}>{chat}</SafeAreaView>
+
+  renderInputToolbarCamera() {
+    return <View style={{ flexDirection: 'row' }}>
+
+      <TouchableOpacity
+        onPress={() => { console.log("camera") }}>
+        <MaterialCommunityIcons
+          name='camera'
+          size={40}
+        />
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        onPress={() => { console.log("img") }}>
+        <MaterialCommunityIcons
+          name='image'
+          size={40}
+        />
+      </TouchableOpacity>
+    </View>
   }
 
+  render() {
+    const chat = <GiftedChat
+      // renderSend={(props) => (
+      //   <View style={{ flexDirection: 'row' }}>
+      //     <MaterialCommunityIcons
+      //       name='send-circle'
+      //       size={40}
+      //       onPress={Fire.sen}
+      //     />
+      //   </View>
+      // )}
+      messages={this.state.messages}
+      user={this.user}
+      onSend={Fire.send}
+      renderActions={this.renderInputToolbarCamera}
+
+    />
+
+    // if (Platform.OS === "android") {
+    //   return (
+    //     <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding" keyboardVerticalOffset={38} enabled>
+    //       {chat}
+
+    //     </KeyboardAvoidingView>
+    //   )
+    // }
+
+    return <SafeAreaView style={{ flex: 1 }}>
+      <Text>a</Text>
+
+      {chat}</SafeAreaView>
+  }
+
+
 }
+
 
 
